@@ -1,5 +1,6 @@
 package dev.adam.spigotkit.core;
 
+import dev.adam.spigotkit.config.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 
@@ -47,6 +48,36 @@ public final class Messages {
 
     public static void setUnknownSubcommand(String messageTemplate) {
         unknownSubcommand = messageTemplate;
+    }
+
+    /**
+     * Load message templates from a config file.
+     * <p>
+     * Expected keys (under the given base path):
+     * <ul>
+     *   <li>no-permission</li>
+     *   <li>player-only</li>
+     *   <li>error</li>
+     *   <li>unknown-subcommand</li>
+     * </ul>
+     */
+    public static void loadFromConfig(Config config, String basePath) {
+        if (config == null) {
+            return;
+        }
+        String prefix = basePath == null || basePath.isEmpty() ? "" : basePath + ".";
+        noPermission = config.getString(prefix + "no-permission", noPermission);
+        playerOnly = config.getString(prefix + "player-only", playerOnly);
+        error = config.getString(prefix + "error", error);
+        unknownSubcommand = config.getString(prefix + "unknown-subcommand", unknownSubcommand);
+    }
+
+    /**
+     * Load message templates from a config file using the default
+     * base path of {@code messages}.
+     */
+    public static void loadFromConfig(Config config) {
+        loadFromConfig(config, "messages");
     }
 
     /**

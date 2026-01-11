@@ -30,6 +30,16 @@ You still declare commands in `plugin.yml`, but from there everything is code-fi
   - Optional tab-completion callback
 - Lambda-friendly: executors are just `void execute(CommandContext ctx)`.
 
+On top of that there's a small `Commands` helper class so you can write:
+
+```java
+Commands.playerCommand(commands, "heal", "kit.heal", "Heals the player", ctx -> {
+  Player player = ctx.requirePlayer();
+  player.setHealth(player.getMaxHealth());
+  ctx.reply(ChatColor.GREEN + "Healed!");
+});
+```
+
 ### Config
 
 One small wrapper that hides "is this YAML or JSON?" for you:
@@ -47,6 +57,8 @@ One small wrapper that hides "is this YAML or JSON?" for you:
 - Same getters with defaults when the path is missing:
   - `getString(path, def)`, `getInt(path, def)`, `getBoolean(path, def)`, `getDouble(path, def)`
   - `getStringList(path, def)`, `getIntList(path, def)`
+- Section helpers:
+  - `getSectionKeys(path)` – child keys under a path (works for YAML and JSON)
 - Writes & helpers: `set(path, value)`, `contains(path)`, `save()`, `reload()`.
 
 ### Core utilities

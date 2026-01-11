@@ -21,6 +21,8 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Unified configuration wrapper for YAML and JSON formats.
@@ -327,6 +329,30 @@ public final class Config {
         }
         String lastKey = parts[parts.length - 1];
         current.add(lastKey, toJsonElement(value));
+    }
+
+    /**
+     * Returns the direct child keys of a configuration section.
+     * For example, for path "demo" this might return ["prefix", "enabled"].
+     */
+    public Set<String> getSectionKeys(String path) {
+        if (format == Format.YAML) {
+            org.bukkit.configuration.ConfigurationSection section = yamlConfig.getConfigurationSection(path);
+            if (section == null) {
+                return new LinkedHashSet<String>();
+            }
+            return new LinkedHashSet<String>(section.getKeys(false));
+        }
+        JsonElement el = getJson(path);
+        if (el == null || !el.isJsonObject()) {
+            return new LinkedHashSet<String>();
+        }
+        JsonObject obj = el.getAsJsonObject();
+        Set<String> keys = new LinkedHashSet<String>();
+        for (java.util.Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+            keys.add(entry.getKey());
+        }
+        return keys;
     }
 
     private JsonElement getJson(String path) {
