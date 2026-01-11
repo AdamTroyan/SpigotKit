@@ -44,6 +44,9 @@ One small wrapper that hides "is this YAML or JSON?" for you:
 - Typed getters:
   - `getString`, `getInt`, `getBoolean`, `getDouble`
   - `getStringList`, `getIntList`
+- Same getters with defaults when the path is missing:
+  - `getString(path, def)`, `getInt(path, def)`, `getBoolean(path, def)`, `getDouble(path, def)`
+  - `getStringList(path, def)`, `getIntList(path, def)`
 - Writes & helpers: `set(path, value)`, `contains(path)`, `save()`, `reload()`.
 
 ### Core utilities
@@ -189,7 +192,7 @@ homes:
   max: 3
 ```
 
-Usage:
+Usage (no defaults):
 
 ```java
 Config config = Config.load(this, "config", Format.AUTO);
@@ -200,6 +203,10 @@ int maxHomes = config.getInt("homes.max");
 
 config.set("homes.max", 5);
 config.save();
+
+// Or with defaults if the path is missing
+String safePrefix = config.getString("chat.prefix", "[Server] ");
+int safeMaxHomes = config.getInt("homes.max", 3);
 ```
 
 ### JSON (config.json)

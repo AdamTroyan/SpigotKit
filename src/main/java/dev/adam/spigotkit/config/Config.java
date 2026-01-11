@@ -204,12 +204,24 @@ public final class Config {
         return el != null && el.isJsonPrimitive() ? el.getAsString() : null;
     }
 
+    public String getString(String path, String def) {
+        String value = getString(path);
+        return value != null ? value : def;
+    }
+
     public int getInt(String path) {
         if (format == Format.YAML) {
             return yamlConfig.getInt(path);
         }
         JsonElement el = getJson(path);
         return el != null && el.isJsonPrimitive() ? el.getAsInt() : 0;
+    }
+
+    public int getInt(String path, int def) {
+        if (!contains(path)) {
+            return def;
+        }
+        return getInt(path);
     }
 
     public boolean getBoolean(String path) {
@@ -220,12 +232,26 @@ public final class Config {
         return el != null && el.isJsonPrimitive() && el.getAsBoolean();
     }
 
+    public boolean getBoolean(String path, boolean def) {
+        if (!contains(path)) {
+            return def;
+        }
+        return getBoolean(path);
+    }
+
     public double getDouble(String path) {
         if (format == Format.YAML) {
             return yamlConfig.getDouble(path);
         }
         JsonElement el = getJson(path);
         return el != null && el.isJsonPrimitive() ? el.getAsDouble() : 0.0D;
+    }
+
+    public double getDouble(String path, double def) {
+        if (!contains(path)) {
+            return def;
+        }
+        return getDouble(path);
     }
 
     public List<String> getStringList(String path) {
@@ -243,6 +269,11 @@ public final class Config {
             }
         }
         return list;
+    }
+
+    public List<String> getStringList(String path, List<String> def) {
+        List<String> list = getStringList(path);
+        return list != null && !list.isEmpty() ? list : def;
     }
 
     public List<Integer> getIntList(String path) {
@@ -266,6 +297,11 @@ public final class Config {
             }
         }
         return list;
+    }
+
+    public List<Integer> getIntList(String path, List<Integer> def) {
+        List<Integer> list = getIntList(path);
+        return list != null && !list.isEmpty() ? list : def;
     }
 
     public void set(String path, Object value) {
