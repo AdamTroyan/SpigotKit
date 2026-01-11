@@ -2,12 +2,3 @@ name: SpigotKit
 version: '${project.version}'
 main: dev.adam.spigotkit.SpigotKit
 api-version: '1.21'
-
-commands:
-	heal:
-		description: Heal the executing player
-		usage: /heal
-		aliases: ["h"]
-	home:
-		description: Home command (set/tp)
-		usage: /home <set|tp>
